@@ -31,5 +31,5 @@ after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker push kaizendev/udagram-api-feed
   - docker push kaizendev/udagram-api-user
-  - docker push kaizendev/udagram-frontend:local
+  - docker push kaizendev/udagram-frontend
   - docker push kaizendev/reverseproxy

@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-user
+  labels: 
+    app: backend-user
+spec:
+  replicas: 2
+  selector: 
+    matchLabels:
+      app: backend-user
+  template:
+    metadata:
+      labels:
+        app: backend-user
+    spec:
+      containers:
+      - name: backend-user
+        image: kaizendev/udagram-api-user
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
+        command:
+          - "/bin/sh"
+          - "-c"
+        args:
+          - "env && sleep 3600"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: db-config
+              key: postgres_username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-config
+              key: postgres_password
+        - name: aws_access_key_id
+          valueFrom:
+            secretKeyRef:
+              name: aws-config
+              key: aws_access_key_id
+        - name: aws_secret_access_key
+          valueFrom:
+            secretKeyRef:
+              name: aws-config
+              key: aws_secret_access_key
+        - name: POSTGRES_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: postgres_host
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: postgres_db
+        - name: AWS_BUCKET
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: aws_bucket
+        - name: AWS_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: aws_region
+        - name: JWT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: jwt_secret
+        - name: URL
+          valueFrom:
+            configMapKeyRef:
+              name: my-config
+              key: url
